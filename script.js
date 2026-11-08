@@ -20,8 +20,6 @@
       var section = document.getElementById('scene-stop-' + (i + 1));
       if (!section) return;
       section.querySelector('[data-field="stampLocation"]').textContent = stop.stampLocation;
-      section.querySelector('[data-field="day"]').textContent = stop.day;
-      section.querySelector('[data-field="month"]').textContent = stop.month;
       section.querySelector('[data-field="title"]').textContent = stop.title;
       section.querySelector('[data-field="reflection"]').textContent = stop.reflection;
     });
