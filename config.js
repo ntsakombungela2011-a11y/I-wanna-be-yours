@@ -8,8 +8,8 @@
 
 const CONFIG = {
   // --- Lock Screen ---
-  passphraseHint: "Hint: the password is \"password\"",
-  password: "password",
+  passphraseHint: "✨ toes",
+  password: "TwinkleToes",
   bypass: "skip",
 
   // --- Ticket Screen ---
