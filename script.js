@@ -18,7 +18,6 @@
       journeyMaster.gain.value = 0.85;
       journeyMaster.connect(journeyAudio.destination);
     }
-    if (journeyAudio.state === 'suspended') journeyAudio.resume();
     return journeyAudio;
   }
 
@@ -105,33 +104,61 @@
     }
   }
 
-  function startAudioExperience() {
-    getAudio();
+  async function startAudioExperience() {
+    const ctx = getAudio();
+    if (!ctx) throw new Error('This browser does not support Web Audio.');
+
+    // Resume inside the tap handler and wait until the browser confirms playback.
+    if (ctx.state !== 'running') await ctx.resume();
+    if (ctx.state !== 'running') {
+      throw new Error('The browser kept the audio context in ' + ctx.state + ' state.');
+    }
+
+    soundEnabled = true;
     startRailAmbience();
+
     const toggle = document.getElementById('sound-toggle');
     if (toggle) {
       toggle.hidden = false;
       toggle.setAttribute('aria-pressed', 'true');
       toggle.setAttribute('aria-label', 'Turn sound off');
       toggle.innerHTML = '♫ <span>Sound on</span>';
+      toggle.title = 'Train sounds are playing';
     }
   }
 
   function setupSoundToggle() {
     const toggle = document.getElementById('sound-toggle');
     if (!toggle) return;
-    toggle.addEventListener('click', function () {
-      if (!soundEnabled) {
-        soundEnabled = true;
-        startAudioExperience();
-        playTone(880, 0.42, 'sine', 0.18, 660);
-      } else {
+    toggle.addEventListener('click', async function () {
+      if (soundEnabled) {
         soundEnabled = false;
         stopRailAmbience();
+        toggle.setAttribute('aria-pressed', 'false');
+        toggle.setAttribute('aria-label', 'Enable sound');
+        toggle.innerHTML = '♪ <span>Enable sound</span>';
+        toggle.title = 'Sound is off';
+        return;
       }
-      toggle.setAttribute('aria-pressed', String(soundEnabled));
-      toggle.setAttribute('aria-label', soundEnabled ? 'Turn sound off' : 'Enable sound');
-      toggle.innerHTML = soundEnabled ? '♫ <span>Sound on</span>' : '♪ <span>Enable sound</span>';
+
+      toggle.disabled = true;
+      toggle.innerHTML = '… <span>Starting sound</span>';
+      toggle.title = 'Waiting for the browser audio system';
+      try {
+        await startAudioExperience();
+        // Play the confirmation tone only after the context is actually running.
+        playTone(880, 0.55, 'sine', 0.24, 660);
+      } catch (error) {
+        soundEnabled = false;
+        stopRailAmbience();
+        toggle.setAttribute('aria-pressed', 'false');
+        toggle.setAttribute('aria-label', 'Sound unavailable. Tap to retry.');
+        toggle.innerHTML = '♪ <span>Sound unavailable</span>';
+        toggle.title = error && error.message ? error.message : String(error);
+        console.error('Journey audio could not start:', error);
+      } finally {
+        toggle.disabled = false;
+      }
     });
   }
 
