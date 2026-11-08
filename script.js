@@ -121,7 +121,6 @@
     const toggle = document.getElementById('sound-toggle');
     if (!toggle) return;
     toggle.addEventListener('click', function () {
-      soundEnabled = !soundEnabled;
       if (!soundEnabled) {
         soundEnabled = true;
         startAudioExperience();
@@ -131,7 +130,7 @@
         stopRailAmbience();
       }
       toggle.setAttribute('aria-pressed', String(soundEnabled));
-      toggle.setAttribute('aria-label', soundEnabled ? 'Turn sound off' : 'Turn sound on');
+      toggle.setAttribute('aria-label', soundEnabled ? 'Turn sound off' : 'Enable sound');
       toggle.innerHTML = soundEnabled ? '♫ <span>Sound on</span>' : '♪ <span>Enable sound</span>';
     });
   }
