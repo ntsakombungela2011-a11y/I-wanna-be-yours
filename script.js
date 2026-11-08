@@ -7,7 +7,7 @@
   let journeyMaster = null;
   let ambienceNodes = [];
   let railTimer = null;
-  let soundEnabled = true;
+  let soundEnabled = false;
 
   function getAudio() {
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
@@ -15,7 +15,7 @@
     if (!journeyAudio) {
       journeyAudio = new AudioContextClass();
       journeyMaster = journeyAudio.createGain();
-      journeyMaster.gain.value = 0.42;
+      journeyMaster.gain.value = 0.85;
       journeyMaster.connect(journeyAudio.destination);
     }
     if (journeyAudio.state === 'suspended') journeyAudio.resume();
@@ -56,7 +56,7 @@
     filter.type = 'lowpass';
     filter.frequency.value = 175;
     const rumbleGain = ctx.createGain();
-    rumbleGain.gain.value = 0.12;
+    rumbleGain.gain.value = 0.28;
     noise.connect(filter);
     filter.connect(rumbleGain);
     rumbleGain.connect(journeyMaster);
@@ -66,7 +66,7 @@
     const engineGain = ctx.createGain();
     engine.type = 'sine';
     engine.frequency.value = 48;
-    engineGain.gain.value = 0.025;
+    engineGain.gain.value = 0.055;
     engine.connect(engineGain);
     engineGain.connect(journeyMaster);
     engine.start();
@@ -122,15 +122,17 @@
     if (!toggle) return;
     toggle.addEventListener('click', function () {
       soundEnabled = !soundEnabled;
-      if (soundEnabled) {
+      if (!soundEnabled) {
+        soundEnabled = true;
         startAudioExperience();
-        playJourneySound('ticket');
+        playTone(880, 0.42, 'sine', 0.18, 660);
       } else {
+        soundEnabled = false;
         stopRailAmbience();
       }
       toggle.setAttribute('aria-pressed', String(soundEnabled));
       toggle.setAttribute('aria-label', soundEnabled ? 'Turn sound off' : 'Turn sound on');
-      toggle.innerHTML = soundEnabled ? '♫ <span>Sound on</span>' : '♪ <span>Sound off</span>';
+      toggle.innerHTML = soundEnabled ? '♫ <span>Sound on</span>' : '♪ <span>Enable sound</span>';
     });
   }
 
@@ -205,7 +207,6 @@
     if (!value) return;
 
     if (normalizePassphrase(value).includes(normalizePassphrase(CONFIG.bypass))) {
-      startAudioExperience();
       lockScreen.classList.add('unlocked');
       mainContent.hidden = false;
       mainContent.classList.add('visible');
@@ -214,7 +215,6 @@
     }
 
     if (validatePassword(value)) {
-      startAudioExperience();
       lockScreen.classList.add('unlocked');
       showTicket();
     } else {
