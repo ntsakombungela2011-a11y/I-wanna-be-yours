@@ -57,15 +57,19 @@
   const unlockBtn = document.getElementById('unlock-btn');
   const lockError = document.getElementById('lock-error');
 
+  function normalizePassphrase(value) {
+    return String(value).trim().toLowerCase();
+  }
+
   function validatePassword(input) {
-    return input.toLowerCase().includes(CONFIG.password.toLowerCase());
+    return normalizePassphrase(input) === normalizePassphrase(CONFIG.password);
   }
 
   function attemptUnlock() {
     const value = passwordInput.value.trim();
     if (!value) return;
 
-    if (value.toLowerCase().includes(CONFIG.bypass.toLowerCase())) {
+    if (normalizePassphrase(value).includes(normalizePassphrase(CONFIG.bypass))) {
       lockScreen.classList.add('unlocked');
       mainContent.hidden = false;
       mainContent.classList.add('visible');
