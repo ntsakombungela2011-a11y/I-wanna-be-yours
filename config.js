@@ -14,34 +14,22 @@
 const CONFIG = {
 
   // --- Lock Screen ---
-  // The passphrase hint shown to the visitor (e.g., "Everything in moderation...")
   passphraseHint: "Hint: the password is \"password\"",
-
-  // The word/phrase the visitor must type (case-insensitive, checked with .includes())
   password: "password",
-
-  // A bypass word that skips the ticket + departure board and jumps to stop 1
   bypass: "skip",
 
   // --- Ticket Screen ---
-  // The greeting that appears before the ticket (e.g., "Hey there!")
   ticketGreeting: "Hey there!",
-
-  // Ticket details
-  ticketPassenger: "Jane Doe",
+  ticketPassenger: "Boipelo",
   ticketDate: "1 JAN 2026",
   ticketClass: "FIRST",
 
   // --- Departure Board ---
-  // The name of the main "express" train (appears on the board as the clickable row)
   expressName: "BIRTHDAY EXPRESS",
-
-  // Final destination heading (shown at the letter scene)
   finalDestinationTitle: "Final Destination: Your Special Day",
   finalDestinationSubtitle: "Hope you enjoyed the ride!",
 
   // --- Stops (Postcards) ---
-  // Each stop has: day, month, stampLocation, title, reflection
   stops: [
     {
       day: "1",
@@ -82,16 +70,12 @@ const CONFIG = {
 
   // --- Letter (Final Envelope) ---
   letterHeading: "Happy Birthday!",
-
-  // Each string in this array becomes its own paragraph
   letterParagraphs: [
     "Write your opening here. Set the tone — playful, heartfelt, or a mix of both.",
     "Share something you admire about them. Be specific — the details are what make it personal.",
     "Tell them about a quality of theirs that surprised you, or something they do that always makes you smile.",
-    "Write your birthday wish. What do you hope for them this year?",
+    "Write your birthday wish. What do you hope for them this year?"
   ],
-
-  // The sign-off line (e.g., "Love, Your Name")
   letterSignoff: "With love, [Your Name]",
 
   // --- Footer ---
@@ -100,6 +84,5 @@ const CONFIG = {
 
   // --- Page Title & Favicon ---
   pageTitle: "Happy Birthday",
-  // Favicon initials shown in the browser tab (2 characters max)
-  faviconInitials: "HB",
+  faviconInitials: "HB"
 };
