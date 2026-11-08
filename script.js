@@ -235,10 +235,22 @@
   }
 
   function attemptUnlock() {
+    function enableTrainSoundFromUnlock() {
+      // This runs inside the password-submit gesture, so mobile browsers can allow audio.
+      startAudioExperience().catch(function (error) {
+        console.error('Train ambience could not start during unlock:', error);
+        const soundToggle = document.getElementById('sound-toggle');
+        if (soundToggle) {
+          soundToggle.hidden = false;
+          soundToggle.title = error && error.message ? error.message : 'Tap to enable train sound';
+        }
+      });
+    }
     const value = passwordInput.value.trim();
     if (!value) return;
 
     if (normalizePassphrase(value).includes(normalizePassphrase(CONFIG.bypass))) {
+      enableTrainSoundFromUnlock();
       lockScreen.classList.add('unlocked');
       mainContent.hidden = false;
       mainContent.classList.add('visible');
@@ -247,6 +259,7 @@
     }
 
     if (validatePassword(value)) {
+      enableTrainSoundFromUnlock();
       lockScreen.classList.add('unlocked');
       showTicket();
     } else {
