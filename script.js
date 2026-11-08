@@ -1,6 +1,141 @@
 (function () {
   'use strict';
 
+
+  // --- Original train soundscape (generated with Web Audio; no audio files required) ---
+  let journeyAudio = null;
+  let journeyMaster = null;
+  let ambienceNodes = [];
+  let railTimer = null;
+  let soundEnabled = true;
+
+  function getAudio() {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return null;
+    if (!journeyAudio) {
+      journeyAudio = new AudioContextClass();
+      journeyMaster = journeyAudio.createGain();
+      journeyMaster.gain.value = 0.42;
+      journeyMaster.connect(journeyAudio.destination);
+    }
+    if (journeyAudio.state === 'suspended') journeyAudio.resume();
+    return journeyAudio;
+  }
+
+  function playTone(frequency, duration, wave, volume, endFrequency) {
+    const ctx = getAudio();
+    if (!ctx || !soundEnabled) return;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = wave || 'sine';
+    osc.frequency.setValueAtTime(frequency, ctx.currentTime);
+    if (endFrequency) osc.frequency.exponentialRampToValueAtTime(endFrequency, ctx.currentTime + duration);
+    gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(volume || 0.08, ctx.currentTime + 0.025);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+    osc.connect(gain);
+    gain.connect(journeyMaster);
+    osc.start();
+    osc.stop(ctx.currentTime + duration + 0.04);
+  }
+
+  function railClack() {
+    playTone(105, 0.075, 'triangle', 0.035, 58);
+  }
+
+  function startRailAmbience() {
+    const ctx = getAudio();
+    if (!ctx || !soundEnabled || ambienceNodes.length) return;
+    const buffer = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * 0.32;
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+    noise.loop = true;
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 175;
+    const rumbleGain = ctx.createGain();
+    rumbleGain.gain.value = 0.12;
+    noise.connect(filter);
+    filter.connect(rumbleGain);
+    rumbleGain.connect(journeyMaster);
+    noise.start();
+
+    const engine = ctx.createOscillator();
+    const engineGain = ctx.createGain();
+    engine.type = 'sine';
+    engine.frequency.value = 48;
+    engineGain.gain.value = 0.025;
+    engine.connect(engineGain);
+    engineGain.connect(journeyMaster);
+    engine.start();
+
+    ambienceNodes = [noise, engine, filter, rumbleGain, engineGain];
+    railTimer = window.setInterval(railClack, 620);
+  }
+
+  function stopRailAmbience() {
+    if (railTimer) window.clearInterval(railTimer);
+    railTimer = null;
+    ambienceNodes.forEach(function (node) {
+      try { if (node.stop) node.stop(); } catch (error) {}
+      try { node.disconnect(); } catch (error) {}
+    });
+    ambienceNodes = [];
+  }
+
+  function playJourneySound(kind) {
+    if (!soundEnabled) return;
+    if (kind === 'ticket') {
+      playTone(660, 0.22, 'sine', 0.09);
+      window.setTimeout(function () { playTone(880, 0.32, 'sine', 0.07); }, 150);
+    } else if (kind === 'click') {
+      playTone(520, 0.055, 'triangle', 0.045, 390);
+    } else if (kind === 'train') {
+      playTone(95, 0.85, 'sawtooth', 0.075, 42);
+      window.setTimeout(function () { playTone(330, 0.18, 'sine', 0.035); }, 180);
+    } else if (kind === 'letter') {
+      playTone(523, 0.3, 'sine', 0.075);
+      window.setTimeout(function () { playTone(659, 0.3, 'sine', 0.075); }, 130);
+      window.setTimeout(function () { playTone(784, 0.48, 'sine', 0.07); }, 260);
+    } else if (kind === 'departure') {
+      playTone(740, 0.16, 'sine', 0.07);
+      window.setTimeout(function () { playTone(988, 0.22, 'sine', 0.06); }, 180);
+    }
+  }
+
+  function startAudioExperience() {
+    getAudio();
+    startRailAmbience();
+    const toggle = document.getElementById('sound-toggle');
+    if (toggle) {
+      toggle.hidden = false;
+      toggle.setAttribute('aria-pressed', 'true');
+      toggle.setAttribute('aria-label', 'Turn sound off');
+      toggle.innerHTML = '♫ <span>Sound on</span>';
+    }
+  }
+
+  function setupSoundToggle() {
+    const toggle = document.getElementById('sound-toggle');
+    if (!toggle) return;
+    toggle.addEventListener('click', function () {
+      soundEnabled = !soundEnabled;
+      if (soundEnabled) {
+        startAudioExperience();
+        playJourneySound('ticket');
+      } else {
+        stopRailAmbience();
+      }
+      toggle.setAttribute('aria-pressed', String(soundEnabled));
+      toggle.setAttribute('aria-label', soundEnabled ? 'Turn sound off' : 'Turn sound on');
+      toggle.innerHTML = soundEnabled ? '♫ <span>Sound on</span>' : '♪ <span>Sound off</span>';
+    });
+  }
+
+  setupSoundToggle();
+
   // --- Apply CONFIG to DOM ---
   function applyConfig() {
     // Page title
@@ -70,6 +205,7 @@
     if (!value) return;
 
     if (normalizePassphrase(value).includes(normalizePassphrase(CONFIG.bypass))) {
+      startAudioExperience();
       lockScreen.classList.add('unlocked');
       mainContent.hidden = false;
       mainContent.classList.add('visible');
@@ -78,6 +214,7 @@
     }
 
     if (validatePassword(value)) {
+      startAudioExperience();
       lockScreen.classList.add('unlocked');
       showTicket();
     } else {
@@ -100,6 +237,7 @@
   }
 
   function showTicket() {
+    playJourneySound('ticket');
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (prefersReducedMotion) {
@@ -269,6 +407,7 @@
     }
 
     function advance() {
+      playJourneySound('click');
       const nextIndex = currentIndex + 1;
       if (nextIndex >= scenes.length) return;
 
@@ -282,6 +421,7 @@
     }
 
     function goBack() {
+      playJourneySound('click');
       const prevIndex = currentIndex - 1;
       if (prevIndex < 0) return;
       crossFade(prevIndex, 'backward');
@@ -365,6 +505,7 @@
     }
 
     function playTrainTransition(nextIndex, direction) {
+      playJourneySound('train');
       transitioning = true;
       const currentScene = document.getElementById(scenes[currentIndex]);
       const isArrival = nextIndex === 6;
@@ -487,6 +628,7 @@
           daledoRow.classList.add('daledo-clickable');
 
           daledoRow.addEventListener('click', function handleDepart() {
+            playJourneySound('departure');
             daledoRow.removeEventListener('click', handleDepart);
             daledoRow.classList.remove('daledo-clickable');
             statusEl.className = 'departure-row-status status-departed';
@@ -542,6 +684,7 @@
               statusEl.classList.add('status-now-boarding');
 
               daledoRow.addEventListener('click', function handleDepart() {
+                playJourneySound('departure');
                 daledoRow.removeEventListener('click', handleDepart);
                 daledoRow.classList.remove('daledo-clickable');
 
@@ -639,6 +782,7 @@
       if (!envelope || !envelopeWrapper || !letterContainer) return;
 
       function openEnvelope() {
+        playJourneySound('letter');
         envelope.removeEventListener('click', openEnvelope);
         envelope.removeEventListener('keydown', onEnvelopeKey);
 
