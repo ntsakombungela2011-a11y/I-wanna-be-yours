@@ -1992,3 +1992,16 @@ body {
 .sound-toggle[hidden] { display: none; }
 .sound-toggle:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 3px; }
 .sound-toggle span { white-space: nowrap; }
+
+
+/* Credit for the recorded train ambience */
+.sound-credit {
+  position: fixed;
+  z-index: 119;
+  right: max(1rem, env(safe-area-inset-right));
+  bottom: max(4.25rem, calc(env(safe-area-inset-bottom) + 4.25rem));
+  color: var(--color-ink-secondary);
+  font: 0.62rem var(--font-body);
+  opacity: 0.82;
+}
+.sound-credit a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
