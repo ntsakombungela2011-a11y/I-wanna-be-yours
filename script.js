@@ -5,6 +5,10 @@
   // --- Original train soundscape (generated with Web Audio; no audio files required) ---
   let journeyAudio = null;
   let journeyMaster = null;
+  const trainAmbience = new Audio('https://www.orangefreesounds.com/wp-content/uploads/2022/02/Train-ride-ambience-sound-effect.mp3');
+  trainAmbience.loop = true;
+  trainAmbience.preload = 'auto';
+  trainAmbience.volume = 0.38;
   let ambienceNodes = [];
   let railTimer = null;
   let soundEnabled = false;
@@ -77,6 +81,8 @@
   function stopRailAmbience() {
     if (railTimer) window.clearInterval(railTimer);
     railTimer = null;
+    trainAmbience.pause();
+    trainAmbience.currentTime = 0;
     ambienceNodes.forEach(function (node) {
       try { if (node.stop) node.stop(); } catch (error) {}
       try { node.disconnect(); } catch (error) {}
@@ -105,15 +111,15 @@
   }
 
   async function startAudioExperience() {
+    // Start the real recorded train ambience directly from the user's tap.
+    const ambiencePlayback = trainAmbience.play();
     const ctx = getAudio();
-    if (!ctx) throw new Error('This browser does not support Web Audio.');
-
-    // Resume inside the tap handler and wait until the browser confirms playback.
-    if (ctx.state !== 'running') await ctx.resume();
-    if (ctx.state !== 'running') {
-      throw new Error('The browser kept the audio context in ' + ctx.state + ' state.');
+    if (ctx && ctx.state !== 'running') await ctx.resume();
+    if (ctx && ctx.state !== 'running') {
+      trainAmbience.pause();
+      throw new Error('The browser kept the sound system in ' + ctx.state + ' state.');
     }
-
+    await ambiencePlayback;
     soundEnabled = true;
     startRailAmbience();
 
