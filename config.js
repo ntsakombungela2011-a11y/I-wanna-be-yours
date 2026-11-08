@@ -13,7 +13,7 @@ const CONFIG = {
   bypass: "skip",
 
   // --- Ticket Screen ---
-  ticketGreeting: "Hey there!",
+  ticketGreeting: "Hello Lover!",
   ticketPassenger: "Boipelo",
   ticketDate: "1 JAN 2026",
   ticketClass: "FIRST",
