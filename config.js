@@ -55,9 +55,9 @@ const CONFIG = {
   // --- Letter (Final Envelope) ---
   letterHeading: "HAPPY BIRTHDAY BABY🤭🤭🤭🤭😝😝",
   letterParagraphs: [
-    "I love how weird and smart you are. I love how your mind works, how you can be so clever one minute and then do or say the most unexpected thing the next. You have this way of making even ordinary moments entertaining, and I never get tired of listening to you talk about the things you find interesting. I admire how curious you are, how you think about things, and how you have your own way of seeing the world. You're funny without even trying, beautiful in ways you probably don't notice, and so wonderfully yourself. I hope you never feel like you have to hide any of those little parts of you, because they're all part of the person I fell for. I love every bit of your wonderfully weird self, and I'm really lucky to have you in my life."
+    "I love how weird and smart you are. I love how your mind works, how you can be so clever one minute and then do or say the most unexpected thing the next it's so funny. You have this way of making even ordinary moments entertaining, and I never get tired of listening to you talk about the things you find interesting. I admire how you have your own way of seeing the world, I bet you see it as all rainbows and sun shines. You're funny without even trying, beautiful in ways you probably don't notice, and so wonderfully Boipelo. I hope you never feel like you have to hide any of those little parts of you, because they're all part of the person I fell for. I love every bit of your wonderfully weird self, and I'm really lucky to have you in my life😝😝😝"
   ],
-  letterSignoff: "I love you endlessly,",
+  letterSignoff: "I love you endlessly ~ Ntsako",
 
   // --- Footer ---
   footerLine: "Made with love, just for you.",
