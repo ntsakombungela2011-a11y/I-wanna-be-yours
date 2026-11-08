@@ -2,17 +2,11 @@
  * ============================================================
  * CONFIGURATION FILE
  * ============================================================
- * Edit the values below to customize the website for your
- * recipient. Field names here match the placeholder text
- * in index.html, so you can search for them to see where
- * they appear.
- *
- * After editing, just refresh the browser to see changes.
+ * Edit the values below to customize the website.
  * ============================================================
  */
 
 const CONFIG = {
-
   // --- Lock Screen ---
   passphraseHint: "Hint: the password is \"password\"",
   password: "password",
@@ -32,57 +26,44 @@ const CONFIG = {
   // --- Stops (Postcards) ---
   stops: [
     {
-      day: "1",
-      month: "JAN",
-      stampLocation: "The Coffee Shop",
+      stampLocation: "The Beginning",
       title: "The First Meeting",
-      reflection: "Write about your first memory together. What stood out? What made it special? This is where your story begins."
+      reflection: "I remember the day you and I started talking. When you were leaving, I said, “Bye bye, I love you.” You were so caught off guard, and honestly, it was the cutest and funniest thing ever. I still think about that moment and smile."
     },
     {
-      day: "14",
-      month: "FEB",
-      stampLocation: "The Park",
+      stampLocation: "Inter-High",
       title: "The Adventure",
-      reflection: "Describe a shared adventure or outing. What happened? What did you discover about each other? Paint the scene with your words."
+      reflection: "At Inter-High last month, you looked so cute standing there all serious and everything. I would've loveddddd to sneak a lot of pictures if I had my phone. And that day I got to see your toes 🤭🤭 and watch you run 🏃‍♂️. You were moving like a whole train!"
     },
     {
-      day: "10",
-      month: "MAR",
-      stampLocation: "The Kitchen",
+      stampLocation: "The Little Things",
       title: "The Quiet Moment",
-      reflection: "Write about a small, everyday moment that meant something. Not every memory needs to be grand — sometimes the ordinary ones are the most meaningful."
+      reflection: "One of the little everyday things that means everything to me is those moments when we're all lovey-dovey. Like, oh my gosh, it's so cuteeeee. And I know you get happiness attacks too, because I cannot possibly be the only one. Those tiny moments make me so happy."
     },
     {
-      day: "22",
-      month: "APR",
-      stampLocation: "The Rooftop",
+      stampLocation: "My Birthday",
       title: "The Turning Point",
-      reflection: "Describe a moment when something shifted — when your relationship deepened, or you saw them in a new light. What changed?"
+      reflection: "The first day we kissed was on my birthday, which made that day extra special. You were so shocked that I actually kissed you! When I got home, I was ALL happy and started jumping on my bed because I couldn't contain my excitement. Oh, and thank you for that big ahh chocolate. I trust future me has paid you back 🤭"
     },
     {
-      day: "5",
-      month: "MAY",
-      stampLocation: "The Beach",
-      title: "The Road Trip",
-      reflection: "Write about a journey you took together — literal or figurative. Where did you end up? What made it memorable?"
+      stampLocation: "A Little Reminder",
+      title: "I Love You",
+      reflection: "I hope you know just how beautiful you are, inside and out. Your smile, your face, your little expressions and all the tiny things you probably don't even notice make you so lovely to me. I could look at you a hundred times and still find something new to admire. But beyond your beauty, I love who you are. I love your personality, your mind, your weird little ways and the happiness you bring into my life. You're genuinely so special to me, and I hope I never stop reminding you how much I adore you."
     }
   ],
 
   // --- Letter (Final Envelope) ---
-  letterHeading: "Happy Birthday!",
+  letterHeading: "HAPPY BIRTHDAY BABY🤭🤭🤭🤭😝😝",
   letterParagraphs: [
-    "Write your opening here. Set the tone — playful, heartfelt, or a mix of both.",
-    "Share something you admire about them. Be specific — the details are what make it personal.",
-    "Tell them about a quality of theirs that surprised you, or something they do that always makes you smile.",
-    "Write your birthday wish. What do you hope for them this year?"
+    "I love how weird and smart you are. I love how your mind works, how you can be so clever one minute and then do or say the most unexpected thing the next. You have this way of making even ordinary moments entertaining, and I never get tired of listening to you talk about the things you find interesting. I admire how curious you are, how you think about things, and how you have your own way of seeing the world. You're funny without even trying, beautiful in ways you probably don't notice, and so wonderfully yourself. I hope you never feel like you have to hide any of those little parts of you, because they're all part of the person I fell for. I love every bit of your wonderfully weird self, and I'm really lucky to have you in my life."
   ],
-  letterSignoff: "With love, [Your Name]",
+  letterSignoff: "I love you endlessly,",
 
   // --- Footer ---
-  footerLine: "Made with care and caffeine.",
+  footerLine: "Made with love, just for you.",
   footerCopyright: "© 2026 • All feelings reserved.",
 
   // --- Page Title & Favicon ---
-  pageTitle: "Happy Birthday",
+  pageTitle: "Happy Birthday, Boipelo",
   faviconInitials: "HB"
 };
